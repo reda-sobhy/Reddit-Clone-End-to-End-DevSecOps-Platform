@@ -3,8 +3,14 @@ kind: Ingress
 metadata:
   name: reddit-ingress
   namespace: reddit
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    -  reddit.mostafagheta.online
+    secretName: reddit-tls
   rules:
   - host: reddit.mostafagheta.online
     http:
