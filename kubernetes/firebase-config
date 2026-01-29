@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: firebase-config
+  namespace: reddit
 data:
   apiKey: "AIzaSyCGvBTBHyVqECcLZtfLzZaWQ8Fgj35rJ34"
   authDomain: "reddit-clone-r-6d856.firebaseapp.com"
