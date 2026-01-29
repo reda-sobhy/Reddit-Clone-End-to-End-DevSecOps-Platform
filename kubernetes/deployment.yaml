@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-deployment
-  namespace: springboot
+  name: reddit-deployment
+  namespace: reddit
   labels:
-    app: springboot-app
+    app: reddit
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: springboot-app
+      app: reddit
   template:
     metadata:
       labels:
-        app: springboot-app
+        app: reddit
     spec:
       containers:
-      - name: nginx
-        image: nginx
+      - name: reddit
+        image: 734468801857.dkr.ecr.us-east-1.amazonaws.com/redit:1
         ports:
-        - containerPort: 8080
+        - containerPort: 3000
