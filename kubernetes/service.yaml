@@ -1,13 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: springboot-service
-  namespace: springboot      # <--- namespace هنا برضه
+  name: reddit-service
+  namespace: reddit
+  labels:
+    app: reddit
 spec:
+  type: ClusterIP
   selector:
-    app: springboot-app
+    app: reddit
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
-  type: ClusterIp
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
