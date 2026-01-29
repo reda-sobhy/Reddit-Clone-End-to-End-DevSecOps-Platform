@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firebase-config
+data:
+  apiKey: "AIzaSyCGvBTBHyVqECcLZtfLzZaWQ8Fgj35rJ34"
+  authDomain: "reddit-clone-r-6d856.firebaseapp.com"
+  projectId: "reddit-clone-r-6d856"
+  storageBucket: "reddit-clone-r-6d856.firebasestorage.app"
+  messagingSenderId: "152864339766"
+  appId: "1:152864339766:web:12d36601d1f8112d06e597"
+  measurementId: "G-5JSWPBCNES"
