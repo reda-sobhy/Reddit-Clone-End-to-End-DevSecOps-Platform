@@ -107,7 +107,7 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 sh '''
-                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f kubernetes/deployment.yaml
                 kubectl rollout status deployment/$DEPLOYMENT_NAME -n $K8S_NAMESPACE
                 '''
             }
@@ -121,8 +121,6 @@ pipeline {
         failure {
             echo " Pipeline failed"
         }
-        always {
-            sh 'docker system prune -f'
-        }
+    
     }
 }
