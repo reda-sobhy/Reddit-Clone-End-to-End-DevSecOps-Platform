@@ -126,7 +126,7 @@ pipeline {
     //         }
     //     }
     // }
-
+    }
     post {
         success {
             echo "reddit-app deployed successfully to namespace reddit"
