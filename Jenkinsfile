@@ -50,25 +50,25 @@ pipeline {
 //             }
 //         }
 
-//         stage('OWASP Dependency Check') {
-//   steps {
-//     sh '''
-//       mkdir -p reports
-//       mkdir -p .dependency-check
+        stage('OWASP Dependency Check') {
+  steps {
+    sh '''
+      mkdir -p reports
+      mkdir -p .dependency-check
 
-//       docker run --rm \
-//         -v $PWD:/src \
-//         -v $PWD/reports:/report \
-//         -v $PWD/.dependency-check:/root/.dependency-check \
-//         owasp/dependency-check \
-//         --project reddit-app \
-//         --scan /src \
-//         --format XML \
-//         --out /report \
-//         --failOnCVSS 7
-//     '''
-//   }
-// }
+      docker run --rm \
+        -v $PWD:/src \
+        -v $PWD/reports:/report \
+        -v $PWD/.dependency-check:/root/.dependency-check \
+        owasp/dependency-check \
+        --project reddit-app \
+        --scan /src \
+        --format XML \
+        --out /report \ 
+         
+    '''
+  }
+}
 
 
 
