@@ -44,17 +44,17 @@ pipeline {
             }
         }
 
-        // stage('OWASP Dependency Check') {
-        //     steps {
-        //         dependencyCheck additionalArguments: '''
-        //           --scan .
-        //           --format XML
-        //           --failOnCVSS 7
-        //         ''', odcInstallation: 'owasp'
+        stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: '''
+                  --scan .
+                  --format XML
+                  --failOnCVSS 7
+                ''', odcInstallation: 'owasp'
 
-        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-        //     }
-        // }
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
 
         // stage('Docker Build (Multi-Stage)') {
         //     steps {
