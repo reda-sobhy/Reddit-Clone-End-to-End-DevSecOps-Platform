@@ -16,11 +16,7 @@ pipeline {
     }
      
     stages {
-        stage('Check Docker') {
-  steps {
-    sh 'docker --version'
-  }
-}
+        
 
 
         // stage('Checkout Code') {
@@ -66,8 +62,8 @@ pipeline {
         --format XML \
         --out /report \ 
          
-    '''
-  }
+      '''
+  } 
 }
 
 
@@ -152,5 +148,5 @@ pipeline {
             echo "Pipeline failed"
         }
         
-    }
+    
 }
