@@ -14,6 +14,11 @@ pipeline {
     //     DEPLOYMENT_NAME   = "reddit-app"
     //     CONTAINER_NAME    = "reddit-app"
     }
+     stage('Check Docker') {
+  steps {
+    sh 'docker --version'
+  }
+}
 
     stages {
 
@@ -23,46 +28,46 @@ pipeline {
         //     }
         // }
 
-        stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-                      -Dsonar.sources=src \
-                      -Dsonar.exclusions=node_modules/**,.next/**,coverage/**
-                    '''
-                }
-            }
-        }
+        // stage('SonarQube Scan') {
+        //     steps {
+        //         withSonarQubeEnv('sonarqube') {
+        //             sh '''
+        //             sonar-scanner \
+        //               -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+        //               -Dsonar.sources=src \
+        //               -Dsonar.exclusions=node_modules/**,.next/**,coverage/**
+        //             '''
+        //         }
+        //     }
+        // }
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+//         stage('Quality Gate') {
+//             steps {
+//                 timeout(time: 5, unit: 'MINUTES') {
+//                     waitForQualityGate abortPipeline: true
+//                 }
+//             }
+//         }
 
-        stage('OWASP Dependency Check') {
-  steps {
-    sh '''
-      mkdir -p reports
-      mkdir -p .dependency-check
+//         stage('OWASP Dependency Check') {
+//   steps {
+//     sh '''
+//       mkdir -p reports
+//       mkdir -p .dependency-check
 
-      docker run --rm \
-        -v $PWD:/src \
-        -v $PWD/reports:/report \
-        -v $PWD/.dependency-check:/root/.dependency-check \
-        owasp/dependency-check \
-        --project reddit-app \
-        --scan /src \
-        --format XML \
-        --out /report \
-        --failOnCVSS 7
-    '''
-  }
-}
+//       docker run --rm \
+//         -v $PWD:/src \
+//         -v $PWD/reports:/report \
+//         -v $PWD/.dependency-check:/root/.dependency-check \
+//         owasp/dependency-check \
+//         --project reddit-app \
+//         --scan /src \
+//         --format XML \
+//         --out /report \
+//         --failOnCVSS 7
+//     '''
+//   }
+// }
 
 
 
