@@ -45,16 +45,19 @@ pipeline {
         }
 
         stage('OWASP Dependency Check') {
-            steps {
-                dependencyCheck additionalArguments: '''
-                  --scan .
-                  --format XML
-                  --failOnCVSS 7
-                ''', odcInstallation: 'owasp'
+  steps {
+    sh '''
+      mkdir -p reports
+      dependency-check --project reddit-app \
+        --scan . \
+        --format XML \
+        --out reports \
+        --failOnCVSS 7
+    '''
+    archiveArtifacts artifacts: 'reports/dependency-check-report.xml', fingerprint: true
+  }
+}
 
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
 
         // stage('Docker Build (Multi-Stage)') {
         //     steps {
