@@ -48,15 +48,20 @@ pipeline {
   steps {
     sh '''
       mkdir -p reports
-      dependency-check --project reddit-app \
-        --scan . \
+      docker run --rm \
+        -v $PWD:/src \
+        -v $PWD/reports:/report \
+        owasp/dependency-check \
+        --project reddit-app \
+        --scan /src \
         --format XML \
-        --out reports \
+        --out /report \
         --failOnCVSS 7
     '''
     archiveArtifacts artifacts: 'reports/dependency-check-report.xml', fingerprint: true
   }
 }
+
 
 
         // stage('Docker Build (Multi-Stage)') {
