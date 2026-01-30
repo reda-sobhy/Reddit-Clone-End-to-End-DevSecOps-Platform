@@ -5,15 +5,15 @@ pipeline {
     //     nodejs 'node18'
     // }
 
-    // environment {
+    environment {
     //     AWS_REGION        = "us-east-1"
     //     ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/reddit-app"
     //     IMAGE_TAG         = "${BUILD_NUMBER}"
-    //     SONAR_PROJECT_KEY = "reddit-app"
+         SONAR_PROJECT_KEY = "reddit-app"
     //     K8S_NAMESPACE     = "reddit"
     //     DEPLOYMENT_NAME   = "reddit-app"
     //     CONTAINER_NAME    = "reddit-app"
-    // }
+    }
 
     stages {
 
