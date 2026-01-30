@@ -64,6 +64,19 @@ pipeline {
             }
         }
 
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
+                trivy image \
+                  --exit-code 1 \
+                  --severity HIGH,CRITICAL \
+                  --format json \
+                  --output trivy-image-report.json \
+                  $ECR_REPO:$IMAGE_TAG
+                '''
+            }
+        }
+
         stage('Login to ECR') {
             steps {
                 sh '''
@@ -107,7 +120,7 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 sh '''
-                kubectl apply -f kubernetes/deployment.yaml
+                kubectl apply -f k8s/deployment.yaml
                 kubectl rollout status deployment/$DEPLOYMENT_NAME -n $K8S_NAMESPACE
                 '''
             }
@@ -116,11 +129,13 @@ pipeline {
 
     post {
         success {
-            echo " reddit-app deployed successfully to namespace reddit"
+            echo "reddit-app deployed successfully to namespace reddit"
         }
         failure {
-            echo " Pipeline failed"
+            echo "Pipeline failed"
         }
-    
+        always {
+            sh 'docker system prune -f'
+        
     }
 }
