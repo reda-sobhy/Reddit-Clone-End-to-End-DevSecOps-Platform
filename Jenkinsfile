@@ -14,13 +14,14 @@ pipeline {
     //     DEPLOYMENT_NAME   = "reddit-app"
     //     CONTAINER_NAME    = "reddit-app"
     }
-     stage('Check Docker') {
+     
+    stages {
+        stage('Check Docker') {
   steps {
     sh 'docker --version'
   }
 }
 
-    stages {
 
         // stage('Checkout Code') {
         //     steps {
