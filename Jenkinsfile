@@ -48,9 +48,12 @@ pipeline {
   steps {
     sh '''
       mkdir -p reports
+      mkdir -p .dependency-check
+
       docker run --rm \
         -v $PWD:/src \
         -v $PWD/reports:/report \
+        -v $PWD/.dependency-check:/root/.dependency-check \
         owasp/dependency-check \
         --project reddit-app \
         --scan /src \
@@ -58,9 +61,9 @@ pipeline {
         --out /report \
         --failOnCVSS 7
     '''
-    archiveArtifacts artifacts: 'reports/dependency-check-report.xml', fingerprint: true
   }
 }
+
 
 
 
