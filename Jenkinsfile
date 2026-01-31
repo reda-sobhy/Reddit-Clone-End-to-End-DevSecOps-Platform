@@ -156,8 +156,8 @@ pipeline {
       sh '''
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
-        kubectl create ns reddit2
-        kubectl apply -n reddit2 -f kubernetes/
+        kubectl create ns reddit
+        kubectl apply -n reddit -f kubernetes/
  
       '''
     }
