@@ -46,25 +46,24 @@ pipeline {
 //             }
 //         }
 
-        stage('OWASP Dependency Check') {
+      stage('OWASP Dependency Check') {
   steps {
     sh '''
       mkdir -p reports
       mkdir -p .dependency-check
 
-      docker run --rm \
-        -v $PWD:/src \
-        -v $PWD/reports:/report \
-        -v $PWD/.dependency-check:/root/.dependency-check \
-        owasp/dependency-check \
+      dependency-check \
         --project reddit-app \
-        --scan /src \
+        --scan . \
         --format XML \
-        --out /src/report  
-         
-      '''
-  } 
+        --out reports \
+        --failOnCVSS 7
+
+      ls -la reports
+    '''
+  }
 }
+
 
 
 
