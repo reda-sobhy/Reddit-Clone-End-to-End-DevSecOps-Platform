@@ -49,12 +49,14 @@ pipeline {
 stage('OWASP Dependency Check') {
   steps {
     sh '''
+      # Create cache folder inside workspace
       mkdir -p $WORKSPACE/.dependency-check
 
+      # Run OWASP Dependency Check in Docker container
       docker run --rm \
         -v $WORKSPACE:/src \
         -v /home/abdul/nvd:/report \
-        -v $WORKSPACE/.dependency-check:/root/.dependency-check \
+        -v /home/abdul/nvd:/root/.dependency-check \
         owasp/dependency-check \
         --project reddit-app \
         --scan /src \
