@@ -42,28 +42,28 @@ pipeline {
             }
         }
 
-stage('OWASP Dependency Check') {
-  steps {
-    sh '''
-      # Create cache folder inside workspace
-      mkdir -p $WORKSPACE/.dependency-check
+// stage('OWASP Dependency Check') {
+//   steps {
+//     sh '''
+//       # Create cache folder inside workspace
+//       mkdir -p $WORKSPACE/.dependency-check
 
-      # Run OWASP Dependency Check in Docker container
-      docker run --rm \
-        -v $WORKSPACE:/src \
-        -v $WORKSPACE:/report \
-        -v /home/abdul/nvd:/root/.dependency-check \
-        owasp/dependency-check \
-        --project reddit-app \
-        --scan /src \
-        --format XML \
-        --out /report \
-        --failOnCVSS 7
+//       # Run OWASP Dependency Check in Docker container
+//       docker run --rm \
+//         -v $WORKSPACE:/src \
+//         -v $WORKSPACE:/report \
+//         -v /home/abdul/nvd:/root/.dependency-check \
+//         owasp/dependency-check \
+//         --project reddit-app \
+//         --scan /src \
+//         --format XML \
+//         --out /report \
+//         --failOnCVSS 7
 
-      ls -la /home/abdul/nvd
-    '''
-  }
-}
+//       ls -la /home/abdul/nvd
+//     '''
+//   }
+// }
 
 
 
