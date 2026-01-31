@@ -164,7 +164,7 @@ stage('Update Deployment Image') {
   }
 }
 
-
+    }
     post {
         success {
             echo "reddit-app deployed successfully to namespace reddit"
