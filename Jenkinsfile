@@ -53,11 +53,11 @@ stage('OWASP Dependency Check') {
       # Run OWASP Dependency Check in Docker container
       docker run --rm \
         -v $WORKSPACE:/src \
-        -v /home/:/report \
+        -v $WORKSPACE:/report \
         -v /home/abdul/nvd:/root/.dependency-check \
         owasp/dependency-check \
         --project reddit-app \
-        --scan . \
+        --scan /src \
         --format XML \
         --out /report \
         --failOnCVSS 7
@@ -126,33 +126,40 @@ stage('Update Deployment Image') {
 }
 
         stage('Commit & Push Deployment') {
-            steps {
-                sh '''
-                git config user.email "jenkins@yourdomain.com"
-                git config user.name "Jenkins CI"
+  steps {
+    withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+      sh '''
+        git config user.email "jenkins@yourdomain.com"
+        git config user.name "Jenkins CI"
 
-                git add k8s/deployment.yaml
+        git add kubernetes/deployment.yaml
 
-                git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
+        git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
-                git push origin HEAD:${GIT_BRANCH}
-                '''
-            }
-        }
+        git push https://$GIT_USER:$GIT_PASS@github.com/your-org/your-repo.git HEAD
+      '''
+    }
+  }
+}
+
 
        stage('Apply to EKS') {
   steps {
     withCredentials([[
       $class: 'AmazonWebServicesCredentialsBinding',
-      credentialsId: 'aws-ecr-creds'
+      credentialsId: 'aws-cred'
     ]]) {
       sh '''
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
-        kubectl apply -f kubernetes/ 
+
+        kubectl apply -f kubernetes/namespace.yaml
+        kubectl apply -n $K8S_NAMESPACE -f kubernetes/
+ 
       '''
     }
   }
 }
+
 
     post {
         success {
