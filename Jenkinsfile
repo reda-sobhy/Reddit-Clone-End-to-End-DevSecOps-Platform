@@ -10,6 +10,7 @@ pipeline {
         IMAGE_TAG         = "${BUILD_NUMBER}"
          SONAR_PROJECT_KEY = "reddit"
         K8S_NAMESPACE     = "reddit"
+          GIT_REPO = "https://github.com/reda-sobhy/Reddit-Clone-End-to-End-DevSecOps-Platform.git"
         
     }
      
@@ -129,14 +130,15 @@ stage('Update Deployment Image') {
   steps {
     withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
       sh '''
-        git config user.email "jenkins@yourdomain.com"
+        git config user.email "jenkins@gmail.com"
         git config user.name "Jenkins CI"
 
         git add kubernetes/deployment.yaml
 
         git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
-        git push https://$GIT_USER:$GIT_PASS@github.com/your-org/your-repo.git HEAD
+        git push $GIT_REPO HEAD
+
       '''
     }
   }
