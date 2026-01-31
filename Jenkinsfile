@@ -140,7 +140,7 @@ stage('Update Deployment Image') {
         git remote remove jenkins || true
 
         
-        git remote add jenkins https://$GIT_USER:$GIT_PASS@$GIT_REPO
+        git remote add jenkins $GIT_USER:$GIT_PASS@$GIT_REPO
 
         
         git push jenkins main
