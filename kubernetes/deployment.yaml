@@ -18,7 +18,7 @@ spec:
       containers:
       - name: reddit
         # image: 734468801857.dkr.ecr.us-east-1.amazonaws.com/redit:1
-        image: IMAGE_PLACEHOLDER
+        image: 734468801857.dkr.ecr.us-east-1.amazonaws.com/redit:49
         ports:
         - containerPort: 3000
         env:
