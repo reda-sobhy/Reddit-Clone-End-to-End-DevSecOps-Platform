@@ -156,7 +156,7 @@ pipeline {
       sh '''
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
-        kubectl apply -f kubernetes/namespace.yaml
+        kubectl create ns reddit
         kubectl apply -n $K8S_NAMESPACE -f kubernetes/
  
       '''
