@@ -83,17 +83,19 @@ pipeline {
         }
 
         stage('Trivy Image Scan') {
-            steps {
-                sh '''
-                trivy image \
-                  --exit-code 1 \
-                  --severity HIGH,CRITICAL \
-                  --format json \
-                  --output trivy-image-report.json \
-                  $ECR_REPO:$IMAGE_TAG
-                '''
-            }
-        }
+  steps {
+    sh '''
+    trivy image \
+      --exit-code 1 \
+      --severity HIGH,CRITICAL \
+      --format json \
+      --output trivy-image-report.json \
+      $ECR_REPO:$IMAGE_TAG
+    '''
+    archiveArtifacts artifacts: 'trivy-image-report.json', fingerprint: true
+  }
+}
+
 
         // stage('Login to ECR') {
         //     steps {
