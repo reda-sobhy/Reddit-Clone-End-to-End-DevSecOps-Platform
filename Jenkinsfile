@@ -10,7 +10,7 @@ pipeline {
         IMAGE_TAG         = "${BUILD_NUMBER}"
          SONAR_PROJECT_KEY = "reddit"
         K8S_NAMESPACE     = "reddit"
-          GIT_REPO = "github.com/reda-sobhy/Reddit-Clone-End-to-End-DevSecOps-Platform.git"
+          GIT_REPO = "https://github.com/reda-sobhy/Reddit-Clone-End-to-End-DevSecOps-Platform.git"
         
     }
      
@@ -143,7 +143,7 @@ stage('Update Deployment Image') {
         git remote add jenkins https://$GIT_USER:$GIT_PASS@$GIT_REPO
 
         
-        git push jenkins HEAD
+        git push jenkins main
       '''
     }
   }
