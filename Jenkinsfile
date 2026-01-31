@@ -1,8 +1,5 @@
 pipeline {
     agent any
-
-    
-
     environment {
         AWS_REGION        = "us-east-1"
         EKS_CLUSTER_NAME = "my-eks"
