@@ -49,24 +49,20 @@ pipeline {
 stage('OWASP Dependency Check') {
   steps {
     sh '''
-      JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-      export JAVA_HOME
-      export PATH=$JAVA_HOME/bin:$PATH
+      mkdir -p $WORKSPACE/.dependency-check
 
-      echo "JAVA_HOME=$JAVA_HOME"
-      java -version
-
-      mkdir -p reports
-      mkdir -p .dependency-check
-
-     sudo -E  /opt/dependency-check/bin/dependency-check.sh \
+      docker run --rm \
+        -v $WORKSPACE:/src \
+        -v /home/abdul/nvd:/report \
+        -v $WORKSPACE/.dependency-check:/root/.dependency-check \
+        owasp/dependency-check \
         --project reddit-app \
-        --scan . \
+        --scan /src \
         --format XML \
-        --out reports \
+        --out /report \
         --failOnCVSS 7
 
-      ls -la reports
+      ls -la /home/abdul/nvd
     '''
   }
 }
