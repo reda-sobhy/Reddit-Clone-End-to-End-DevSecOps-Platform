@@ -55,11 +55,11 @@ pipeline {
 //       # Run OWASP Dependency Check in Docker container
 //       docker run --rm \
 //         -v $WORKSPACE:/src \
-//         -v /home/abdul/nvd:/report \
+//         -v /home/:/report \
 //         -v /home/abdul/nvd:/root/.dependency-check \
 //         owasp/dependency-check \
 //         --project reddit-app \
-//         --scan /src \
+//         --scan . \
 //         --format XML \
 //         --out /report \
 //         --failOnCVSS 7
@@ -95,30 +95,30 @@ pipeline {
             }
         }
 
-        stage('Login to ECR') {
-            steps {
-                sh '''
-                aws ecr get-login-password --region $AWS_REGION \
-                | docker login --username AWS --password-stdin $ECR_REPO
-                '''
-            }
-        }
+        // stage('Login to ECR') {
+        //     steps {
+        //         sh '''
+        //         aws ecr get-login-password --region $AWS_REGION \
+        //         | docker login --username AWS --password-stdin $ECR_REPO
+        //         '''
+        //     }
+        // }
 
-        stage('Push Image to ECR') {
-            steps {
-                sh '''
-                docker push $ECR_REPO:$IMAGE_TAG
-                '''
-            }
-        }
+        // stage('Push Image to ECR') {
+        //     steps {
+        //         sh '''
+        //         docker push $ECR_REPO:$IMAGE_TAG
+        //         '''
+        //     }
+        // }
 
-        stage('Update Deployment Image') {
-            steps {
-                sh '''
-                sed -i "s|IMAGE_PLACEHOLDER|$ECR_REPO:$IMAGE_TAG|g" kubernetes/deployment.yaml
-                '''
-            }
-        }
+        // stage('Update Deployment Image') {
+        //     steps {
+        //         sh '''
+        //         sed -i "s|IMAGE_PLACEHOLDER|$ECR_REPO:$IMAGE_TAG|g" kubernetes/deployment.yaml
+        //         '''
+        //     }
+        // }
 
         // stage('Commit & Push Deployment') {
         //     steps {
