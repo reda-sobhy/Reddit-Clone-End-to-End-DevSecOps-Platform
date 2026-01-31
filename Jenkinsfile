@@ -9,7 +9,7 @@ pipeline {
         AWS_REGION        = "us-east-1"
           ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/reddit-app"
         IMAGE_TAG         = "${BUILD_NUMBER}"
-         SONAR_PROJECT_KEY = "reddit-app"
+         SONAR_PROJECT_KEY = "reddit"
     //     K8S_NAMESPACE     = "reddit"
     //     DEPLOYMENT_NAME   = "reddit-app"
     //     CONTAINER_NAME    = "reddit-app"
