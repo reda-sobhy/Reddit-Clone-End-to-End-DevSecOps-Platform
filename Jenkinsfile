@@ -137,7 +137,7 @@ stage('Update Deployment Image') {
 
         git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
-        git push $GIT_REPO HEAD
+        git push https://$GIT_USER:$GIT_PASS@$GIT_REPO HEAD
 
       '''
     }
