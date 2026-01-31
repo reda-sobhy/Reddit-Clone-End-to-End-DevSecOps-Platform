@@ -60,7 +60,7 @@ pipeline {
         --project reddit-app \
         --scan /src \
         --format XML \
-        --out /report  
+        --out /src/report  
          
       '''
   } 
