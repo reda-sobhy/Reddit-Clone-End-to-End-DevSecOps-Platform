@@ -46,9 +46,9 @@ pipeline {
 //             }
 //         }
 
-  stage('OWASP Dependency Check') {
+ stage('OWASP Dependency Check') {
   steps {
-    withEnv(["PATH+DC=/usr/local/bin"]) {
+    withEnv(["PATH+DC=/opt/dependency-check/bin"]) {
       sh '''
         mkdir -p reports
         mkdir -p .dependency-check
