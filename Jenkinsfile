@@ -46,23 +46,26 @@ pipeline {
 //             }
 //         }
 
-     stage('OWASP Dependency Check') {
+  stage('OWASP Dependency Check') {
   steps {
-    sh '''
-      mkdir -p reports
-      mkdir -p .dependency-check
+    withEnv(["PATH+DC=/opt/dependency-check/bin"]) {
+      sh '''
+        mkdir -p reports
+        mkdir -p .dependency-check
 
-      dependency-check \
-        --project reddit-app \
-        --scan . \
-        --format XML \
-        --out reports \
-        --failOnCVSS 7
+        dependency-check \
+          --project reddit-app \
+          --scan . \
+          --format XML \
+          --out reports \
+          --failOnCVSS 7
 
-      ls -la reports
-    '''
+        ls -la reports
+      '''
+    }
   }
 }
+
 
 
 
