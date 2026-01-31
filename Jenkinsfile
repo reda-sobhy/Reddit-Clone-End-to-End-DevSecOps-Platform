@@ -143,7 +143,7 @@ stage('Update Deployment Image') {
         git remote add jenkins https://$GIT_USER:$GIT_PASS@$GIT_REPO
 
         
-        git push jenkins main
+        git push jenkins HEAD:main
       '''
     }
   }
