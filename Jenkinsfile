@@ -49,10 +49,17 @@ pipeline {
 stage('OWASP Dependency Check') {
   steps {
     sh '''
+      JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+      export JAVA_HOME
+      export PATH=$JAVA_HOME/bin:$PATH
+
+      echo "JAVA_HOME=$JAVA_HOME"
+      java -version
+
       mkdir -p reports
       mkdir -p .dependency-check
 
-      sudo /opt/dependency-check/bin/dependency-check.sh \
+      /opt/dependency-check/bin/dependency-check.sh \
         --project reddit-app \
         --scan . \
         --format XML \
