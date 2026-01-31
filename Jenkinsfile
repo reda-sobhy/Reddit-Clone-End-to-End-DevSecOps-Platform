@@ -52,7 +52,7 @@ stage('OWASP Dependency Check') {
       mkdir -p reports
       mkdir -p .dependency-check
 
-      /opt/dependency-check/bin/dependency-check.sh \
+      sudo /opt/dependency-check/bin/dependency-check.sh \
         --project reddit-app \
         --scan . \
         --format XML \
