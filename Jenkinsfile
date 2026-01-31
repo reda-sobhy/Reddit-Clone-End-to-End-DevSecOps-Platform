@@ -5,7 +5,7 @@ pipeline {
         EKS_CLUSTER_NAME = "my-eks"
           ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/redit"
         IMAGE_TAG         = "${BUILD_NUMBER}"
-         SONAR_PROJECT_KEY = "reddit"
+         SONAR_PROJECT_KEY = "reddit-2"
         K8S_NAMESPACE     = "reddit"
           GIT_REPO = "github.com/reda-sobhy/Reddit-Clone-End-to-End-DevSecOps-Platform.git"
         
