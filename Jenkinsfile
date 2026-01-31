@@ -1,73 +1,71 @@
 pipeline {
     agent any
 
-    // tools {
-    //     nodejs 'node18'
-    // }
+    
 
     environment {
         AWS_REGION        = "us-east-1"
+        EKS_CLUSTER_NAME = "my-eks"
           ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/redit"
         IMAGE_TAG         = "${BUILD_NUMBER}"
          SONAR_PROJECT_KEY = "reddit"
-    //     K8S_NAMESPACE     = "reddit"
-    //     DEPLOYMENT_NAME   = "reddit-app"
-    //     CONTAINER_NAME    = "reddit-app"
+        K8S_NAMESPACE     = "reddit"
+        
     }
      
     stages {
         
 
 
-        // stage('Checkout Code') {
-        //     steps {
-        //         checkout scm
-        //     }
-        // }
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
 
-        // stage('SonarQube Scan') {
-        //     steps {
-        //         withSonarQubeEnv('sonarqube') {
-        //             sh '''
-        //             sonar-scanner \
-        //               -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-        //               -Dsonar.sources=src \
-        //               -Dsonar.exclusions=node_modules/**,.next/**,coverage/**
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh '''
+                    sonar-scanner \
+                      -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+                      -Dsonar.sources=src \
+                      -Dsonar.exclusions=node_modules/**,.next/**,coverage/**
+                    '''
+                }
+            }
+        }
 
-//         stage('Quality Gate') {
-//             steps {
-//                 timeout(time: 5, unit: 'MINUTES') {
-//                     waitForQualityGate abortPipeline: true
-//                 }
-//             }
-//         }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
-// stage('OWASP Dependency Check') {
-//   steps {
-//     sh '''
-//       # Create cache folder inside workspace
-//       mkdir -p $WORKSPACE/.dependency-check
+stage('OWASP Dependency Check') {
+  steps {
+    sh '''
+      # Create cache folder inside workspace
+      mkdir -p $WORKSPACE/.dependency-check
 
-//       # Run OWASP Dependency Check in Docker container
-//       docker run --rm \
-//         -v $WORKSPACE:/src \
-//         -v /home/:/report \
-//         -v /home/abdul/nvd:/root/.dependency-check \
-//         owasp/dependency-check \
-//         --project reddit-app \
-//         --scan . \
-//         --format XML \
-//         --out /report \
-//         --failOnCVSS 7
+      # Run OWASP Dependency Check in Docker container
+      docker run --rm \
+        -v $WORKSPACE:/src \
+        -v /home/:/report \
+        -v /home/abdul/nvd:/root/.dependency-check \
+        owasp/dependency-check \
+        --project reddit-app \
+        --scan . \
+        --format XML \
+        --out /report \
+        --failOnCVSS 7
 
-//       ls -la /home/abdul/nvd
-//     '''
-//   }
-// }
+      ls -la /home/abdul/nvd
+    '''
+  }
+}
 
 
 
@@ -127,31 +125,35 @@ stage('Update Deployment Image') {
   }
 }
 
-        // stage('Commit & Push Deployment') {
-        //     steps {
-        //         sh '''
-        //         git config user.email "jenkins@yourdomain.com"
-        //         git config user.name "Jenkins CI"
+        stage('Commit & Push Deployment') {
+            steps {
+                sh '''
+                git config user.email "jenkins@yourdomain.com"
+                git config user.name "Jenkins CI"
 
-        //         git add k8s/deployment.yaml
+                git add k8s/deployment.yaml
 
-        //         git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
+                git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
-        //         git push origin HEAD:${GIT_BRANCH}
-        //         '''
-        //     }
-        // }
+                git push origin HEAD:${GIT_BRANCH}
+                '''
+            }
+        }
 
-    //     stage('Deploy to EKS') {
-    //         steps {
-    //             sh '''
-    //             kubectl apply -f k8s/deployment.yaml
-    //             kubectl rollout status deployment/$DEPLOYMENT_NAME -n $K8S_NAMESPACE
-    //             '''
-    //         }
-    //     }
-    // }
+       stage('Apply to EKS') {
+  steps {
+    withCredentials([[
+      $class: 'AmazonWebServicesCredentialsBinding',
+      credentialsId: 'aws-ecr-creds'
+    ]]) {
+      sh '''
+        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+        kubectl apply -f kubernetes/ 
+      '''
     }
+  }
+}
+
     post {
         success {
             echo "reddit-app deployed successfully to namespace reddit"
