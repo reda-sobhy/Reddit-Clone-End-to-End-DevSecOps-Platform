@@ -126,7 +126,7 @@ stage('Update Deployment Image') {
   }
 }
 
-        stage('Commit & Push Deployment') {
+      stage('Commit & Push Deployment') {
   steps {
     withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
       sh '''
@@ -134,11 +134,16 @@ stage('Update Deployment Image') {
         git config user.name "Jenkins CI"
 
         git add kubernetes/deployment.yaml
-
         git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
-        git push https://$GIT_USER:$GIT_PASS@$GIT_REPO HEAD
+        
+        git remote remove jenkins || true
 
+        
+        git remote add jenkins https://$GIT_USER:$GIT_PASS@$GIT_REPO
+
+        
+        git push jenkins HEAD
       '''
     }
   }
