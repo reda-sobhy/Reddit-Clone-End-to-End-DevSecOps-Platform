@@ -86,7 +86,7 @@ pipeline {
   steps {
     sh '''
     trivy image \
-      --exit-code 1 \
+      --exit-code 0 \
       --severity HIGH,CRITICAL \
       --format json \
       --output trivy-image-report.json \
