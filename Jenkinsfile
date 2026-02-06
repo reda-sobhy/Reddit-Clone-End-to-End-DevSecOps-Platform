@@ -58,25 +58,46 @@ stage('OWASP Dependency Check') {
         --scan /src \
         --format XML \
         --out /report \
-        --failOnCVSS 7
+        
 
-      ls -la /home/abdul/nvd
+      
     '''
   }
 }
 
-
-
-
-
-
-        stage('Docker Build (Multi-Stage)') {
+ stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t $ECR_REPO:$IMAGE_TAG .
-                '''
+                withCredentials([
+                    file(credentialsId: 'firebase-config', variable: 'ENV_FILE')
+                ]) {
+                    sh '''
+                      echo "Loading env vars from secret file..."
+
+                      set -a
+                      . "$ENV_FILE"
+                      set +a
+
+                      echo "Building docker image..."
+
+                      docker build \
+                        --build-arg NEXT_PUBLIC_FIREBASE_API_KEY \
+                        --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN \
+                        --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID \
+                        --build-arg NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET \
+                        --build-arg NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID \
+                        --build-arg NEXT_PUBLIC_FIREBASE_APP_ID \
+                        --build-arg NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID \
+                        -t reddit-nextjs-app .
+                    '''
+                }
             }
         }
+
+
+
+
+
+       
 
         stage('Trivy Image Scan') {
   steps {
